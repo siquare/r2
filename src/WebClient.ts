@@ -15,17 +15,12 @@ export default class WebClient {
     const res = await fetch(url, init);
     let logText = `Response from ${res.url}. ` +
       `Status Code: ${res.status} (${res.statusText}) `;
-    this.log.debug(logText);
+    this.log.debug(logText);    
     const content = await res.text();
-    if (!res.ok) {
-      if (res.status === 525) {
-        this.log.debug(`HTTP request failed but status code is 525. So retrying. ${logText}`);
-        return await this.fetch<T>(path, init, verbose);
-      }
-
+    if (!res.ok) {      
       logText += `Content: ${content}`;
       throw new Error(`HTTP request failed. ${logText}`);
-    }
+    }    
     if (!content) {
       return {} as T;
     }
